@@ -5,9 +5,11 @@ import (
 	"os"
 
 	"github.com/gentil-eilison/bougette-backend/cmd/api/handlers"
+	"github.com/gentil-eilison/bougette-backend/cmd/api/middlewares"
 	"github.com/gentil-eilison/bougette-backend/common"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Application struct {
@@ -35,6 +37,7 @@ func main() {
 		handler: handlers.Handler{DB: db},
 	}
 	app.Routes()
+	echoServer.Use(middlewares.AnotherMiddleWare, middlewares.CustomMiddleware, middleware.Logger())
 	port := os.Getenv("APP_PORT")
 	appAddress := fmt.Sprintf("localhost:%s", port)
 	echoServer.Logger.Fatal(echoServer.Start(appAddress))
